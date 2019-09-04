@@ -2,6 +2,11 @@ from pyproj import CRS
 import affine
 
 
+class CFComplianceError(Exception):
+    """Raised when the HDF5 file does not follow CF conventions."""
+    pass
+
+
 """ Returns the proj4 string corresponding to the coordinate reference system of the HDF5 dataset.
 
     Args:
@@ -12,11 +17,14 @@ import affine
 """
 def get_hdf_proj4(h5_dataset):
     dimensions = get_dimension_datasets(h5_dataset)
+    if not dimensions[0].attrs.__contains__('units'): raise CFComplianceError
     units = dimensions[0].attrs['units'].decode()
 
     if 'degrees' in units:
         # Geographic proj4 string
         return "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+
+    if not h5_dataset.attrs.__contains__('grid_mapping'): raise CFComplianceError
 
     grid_mapping_name = h5_dataset.attrs['grid_mapping']
     grid_mapping = h5_dataset.file[grid_mapping_name]
@@ -34,15 +42,14 @@ def get_hdf_proj4(h5_dataset):
 """
 def get_dimension_datasets(h5_dataset):
     file = h5_dataset.file
+    if 'DIMENSION_LIST' not in h5_dataset.attrs: raise CFComplianceError
 
-    if 'DIMENSION_LIST' in h5_dataset.attrs:
-        dim_list = h5_dataset.attrs['DIMENSION_LIST']
-
-        for ref in dim_list:
-            dim = file[ref[0]]
-            if len(dim[:]) == h5_dataset.shape[0]: y = dim
-            if len(dim[:]) == h5_dataset.shape[1]: x = dim
-        return x, y
+    dim_list = h5_dataset.attrs['DIMENSION_LIST']
+    for ref in dim_list:
+        dim = file[ref[0]]
+        if len(dim[:]) == h5_dataset.shape[0]: y = dim
+        if len(dim[:]) == h5_dataset.shape[1]: x = dim
+    return x, y
 
 
 """ Returns the proj4 string corresponding to a grid mapping dataset
@@ -58,7 +65,7 @@ def get_proj4(grid_mapping):
     decode_bytes(cf_parameters)
 
     dictionary = CRS.from_cf(cf_parameters).to_dict()
-    dictionary['lat_ts'] = cf_parameters['standard_parallel']
+    if 'standard_parallel' in dictionary: dictionary['lat_ts'] = cf_parameters['standard_parallel']
 
     return CRS.from_dict(dictionary).to_proj4()
 
@@ -132,3 +139,18 @@ def get_corner_points(h5_dataset):
 def get_dimension_arrays(h5_dataset):
     x, y = get_dimension_datasets(h5_dataset)
     return x[:], y[:]
+
+
+""" Returns the fill value for the given HDF5 dataset. 
+    If the HDF5 dataset has no fill value, returns the given default fill value.
+
+    Args:
+        h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
+        default_fill_value (float): The default value which is returned if no fill value is found in the dataset
+
+    Returns:
+        float: The fill value
+"""
+def get_fill_value(h5_dataset, default_fill_value):
+    if h5_dataset.attrs.__contains__('_FillValue'): return h5_dataset.attrs['_FillValue']
+    return default_fill_value
