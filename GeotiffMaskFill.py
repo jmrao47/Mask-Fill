@@ -83,8 +83,8 @@ def get_geotiff_proj4(geotiff_path):
 def get_fill_value(geotiff_path, default_fill_value):
     raster = gdal.Open(geotiff_path)
     fill_value = raster.GetRasterBand(1).GetNoDataValue()
-    if fill_value is None: fill_value = default_fill_value
-    return fill_value
+    return default_fill_value if fill_value is None else fill_value
+
 
 
 
