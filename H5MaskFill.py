@@ -5,7 +5,7 @@ import numpy as np
 import h5py
 import MaskFill
 import hashlib
-import GridProjectionInfo
+import H5GridProjectionInfo
 
 
 mask_grid_cache_values = ['ignore_and_delete',
@@ -43,7 +43,8 @@ def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, defaul
         shutil.copy(hdf_path, new_file_path)
         process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
 
-    if mask_grid_cache.__contains__('save') or mask_grid_cache == 'maskgrid_only':
+    # Save mask arrays if the mask_grid_cache value requires
+    if 'delete' not in mask_grid_cache:
         for mask_id, mask_array in saved_mask_arrays.items():
             mask_array_path = get_mask_array_path(mask_id, cache_dir)
             np.save(mask_array_path, mask_array)
@@ -52,19 +53,20 @@ def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, defaul
     return MaskFill.get_masked_file_path(hdf_path, output_dir)
 
 
-""" Performs the given process on all objects in the HDF5 file.
+""" Performs the given process on all datasets in the HDF5 file.
 
     Args:
         file_path (str): The path to the input HDF5 file
-        process (function): The process to be performed on the objects in the file
+        process (function): The process to be performed on the datasets in the file
         *args: The arguments passed to the process
 """
 def process_file(file_path, process, *args):
     def process_children(obj, process, *args):
         for name, child in obj.items():
+            # Process the children of a group
             if isinstance(child, h5py._hl.group.Group):
                 process_children(child, process, *args)
-
+            # Process datasets
             elif isinstance(child, h5py._hl.dataset.Dataset):
                 process(child, *args)
 
@@ -86,49 +88,74 @@ def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_v
     if len(h5_dataset.shape) != 2: return
     show(h5_dataset[:], title="Original " + h5_dataset.name)
 
-    # Perform mask fill and write the new mask filled data to the h5_dataset
+    # Get the mask array corresponding to the HDF5 dataset and the shapefile
     mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+
+    # Perform mask fill and write the new mask filled data to the h5_dataset,
+    # unless the mask_grid_cache value only requires us to create a mask array
     if mask_grid_cache != 'maskgrid_only':
-        fill_value = get_fill_value(h5_dataset, default_fill_value)
+        fill_value = H5GridProjectionInfo.get_fill_value(h5_dataset, default_fill_value)
         mask_filled_data = MaskFill.mask_fill_array(h5_dataset[:], mask_array, fill_value)
         h5_dataset.write_direct(mask_filled_data)
 
         show(mask_filled_data, title="Mask Filled " + h5_dataset.name)
 
         # Get all values in mask_filled_data excluding the fill value
-        data = mask_filled_data[mask_filled_data != fill_value]
+        unfilled_data = mask_filled_data[mask_filled_data != fill_value]
 
         # Update statistics in the h5_dataset
-        if h5_dataset.attrs.__contains__('observed_max'): h5_dataset.attrs.modify('observed_max', max(data))
-        if h5_dataset.attrs.__contains__('observed_min'): h5_dataset.attrs.modify('observed_min', min(data))
-        if h5_dataset.attrs.__contains__('observed_mean'): h5_dataset.attrs.modify('observed_mean', np.mean(data))
+        if h5_dataset.attrs.__contains__('observed_max'): h5_dataset.attrs.modify('observed_max', max(unfilled_data))
+        if h5_dataset.attrs.__contains__('observed_min'): h5_dataset.attrs.modify('observed_min', min(unfilled_data))
+        if h5_dataset.attrs.__contains__('observed_mean'): h5_dataset.attrs.modify('observed_mean', np.mean(unfilled_data))
 
 
-""" Retrieves the mask array corresponding the HDF5 file and shape file from the cache directory. 
-    If the mask array file does not already exist, it is created. 
+""" Gets the mask array corresponding the HDF5 file and shape file from a set of saved mask arrays or the cache directory.
+    If the mask array file does not already exist, it is created and added to the set of saved mask arrays.
 
     Args:
         h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
         shape_path (str): The path to the shapefile used to create the mask array
         cache_dir (str): The path to the directory where the mask array file is cached
+        
+    Returns:
+        numpy.ndarray: The mask array
 """
 def get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays):
+    # Get the mask id which corresponds to the mask required for the HDF5 dataset and shapefile
     mask_id = get_mask_array_id(h5_dataset, shape_path)
+
+    # If the required mask array is in the set of saved mask arrays, get and return the mask array from the set
     if mask_id in saved_mask_arrays: return saved_mask_arrays[mask_id]
 
+    # If the required mask array has already been created and cached, and the mask_grid_cache value allows the use of
+    # cached arrays, read in the cached mask array from the file
     mask_array_path = get_mask_array_path(mask_id, cache_dir)
-    if mask_grid_cache.__contains__('use') and os.path.exists(mask_array_path): mask_array = np.load(mask_array_path)
+    if 'use' in mask_grid_cache and os.path.exists(mask_array_path): mask_array = np.load(mask_array_path)
+
+    # Otherwise, create the mask array
     else: mask_array = create_mask_array(h5_dataset, shape_path)
 
+    # Save and return the mask array
     saved_mask_arrays[mask_id] = mask_array
     return mask_array
 
 
+""" Creates an id corresponding to the given shapefile, projection information, and shape of a dataset,
+    which determine the mask array for the dataset.  
+    
+    Args:
+        h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
+        shape_path (str): Path to a shape file used to create the mask array for the mask fill
+        
+    Returns:
+        str: The id 
+"""
 def get_mask_array_id(h5_dataset, shape_path):
-    # The mask array is determined by the CRS of the dataset, the dataset's transform, and the shapes used in the mask
-    mask_id = str(GridProjectionInfo.get_hdf_proj4(h5_dataset)) + str(GridProjectionInfo.get_transform(h5_dataset)) \
+    # The mask array is determined by the CRS of the dataset, the dataset's transform, the shape of the dataset,
+    # and the shapes used in the mask
+    mask_id = str(H5GridProjectionInfo.get_hdf_proj4(h5_dataset)) + str(H5GridProjectionInfo.get_transform(h5_dataset)) \
               + str(h5_dataset[:].shape) + shape_path
-    # Hash mask_id
+    # Hash the mask id and return
     mask_id = hashlib.sha224(mask_id.encode()).hexdigest()
     return mask_id
 
@@ -156,24 +183,12 @@ def get_mask_array_path(mask_id, cache_dir):
         numpy.ndarray: The mask array
 """
 def create_mask_array(h5_dataset, shape_path):
-    proj4 = GridProjectionInfo.get_hdf_proj4(h5_dataset)
+    proj4 = H5GridProjectionInfo.get_hdf_proj4(h5_dataset)
     shapes = MaskFill.get_projected_shapes(proj4, shape_path)
     raster_arr = h5_dataset[:]
-    transform = GridProjectionInfo.get_transform(h5_dataset)
+    transform = H5GridProjectionInfo.get_transform(h5_dataset)
 
     return MaskFill.get_mask_array(shapes, raster_arr.shape, transform)
 
 
-""" Returns the fill value for the given HDF5 dataset. 
-    If the HDF5 dataset has no fill value, returns the given default fill value.
 
-    Args:
-        h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
-        default_fill_value (float): The default value which is returned if no fill value is found in the dataset
-
-    Returns:
-        float: The fill value
-"""
-def get_fill_value(h5_dataset, default_fill_value):
-    if h5_dataset.attrs.__contains__('_FillValue'): return h5_dataset.attrs['_FillValue']
-    return default_fill_value

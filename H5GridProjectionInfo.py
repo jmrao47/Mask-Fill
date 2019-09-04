@@ -2,8 +2,8 @@ from pyproj import CRS
 import affine
 
 
+""" Raised when an HDF5 file does not follow CF conventions."""
 class CFComplianceError(Exception):
-    """Raised when the HDF5 file does not follow CF conventions."""
     pass
 
 

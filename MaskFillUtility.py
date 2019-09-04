@@ -1,22 +1,38 @@
+#!/usr/bin/env python
+
 import argparse
 import time
 import os
 import GeotiffMaskFill
 import H5MaskFill
+from H5GridProjectionInfo import CFComplianceError
 
 
 """ Executable which creates a mask filled version of a data file using a shapefile.
     Applies a fill value to the data file in the areas outside of the given shapes.
 
     Input parameters:
-        --FILE_URLS: Path to a GeoTIFF of HDF5 file 
+        --FILE_URLS: Path to a GeoTIFF or HDF5 file 
+        
         --SHAPEFILE: Path to a .shp shapefile
+        
         --OUTPUT_DIR: (optional) Path to the output directory where the mask filled file will be written.
-                     If not provided, the current working directory will be used.
-        --MASK_GRID_CACHE: (optional) Value determining how the mask arrays used in the mask fill are created and cached.
-                          If not provided, the value 'ignore_and_delete' will be used.
+            If not provided, the current working directory will be used.
+            
+        --MASK_GRID_CACHE: (optional) Value determining how the mask arrays used in the mask fill are cached and used.
+            Valid values: ignore_and_delete  | ignore_and_save | use_cache  | use_cache_delete | MaskGrid_Only
+
+            ignore_and_delete - ignore any existing MaskGrid (create new) and delete the MaskGrid after processing 
+            input file (default if MaskGridCache not specified)
+            ignore_and_save - save the MaskGrid in output directory and continue (ignore any existing)
+            use_cache | use_and_save - use any existing and save/preserve MaskGrid in output directory
+            use_cache_delete - use any existing MaskGrid, but delete after processing
+            MaskGrid_Only - ignore and save, but no MaskFill processing
+            
+            If not provided, the value 'ignore_and_delete' will be used.
+            
         --DEFAULT_FILL: (optional) The default fill value for the mask fill if no other fill values are provided.
-                       If not provided, the value -9999 will be used.
+            If not provided, the value -9999 will be used.
 """
 
 
@@ -47,7 +63,11 @@ def mask_fill():
                                                         args.mask_grid_cache, args.fill_value)
 
         return get_xml_success_response(args.input_file, args.shape_file, output_file)
-    except: return get_xml_error_response()
+    except CFComplianceError:
+        error_message = "The given data file does not follow CF conventions and cannot be mask filled"
+        return get_xml_error_response(exit_status=1, error_message=error_message)
+    except Exception as e:
+        return get_xml_error_response(error_message=repr(e))
 
 
 """ Gets the input parameters using an argparse argument parser. If no input is given for certain parameters, a default 
@@ -114,7 +134,17 @@ def validate_input_parameters(params):
 """ Returns an XML error response corresponding to the input exit status, error message, and code. 
     If no code is given, the default code will be InternalError; if no error message is given, the default error 
     message will be "An internal error occurred." 
-
+    
+    Args:
+        exit_status (int): A number which represents the type of error: 1 (invalid parameter error), 
+            2 (missing parameter error), or 3 (no matching data error); if none of the above, defaults to None
+        error_message (str): A message describing the reason for the error; 
+            if None, defaults to "An internal error occurred"
+        code (str): A code which describes the type of error; 
+            if the exit status is 1, defaults to "InvalidParameterValue";
+            if the exit status is 2, defaults to "MissingParameterValue";
+            if the exit status is 3, defaults to "NoMatchingData"
+            if no other information is given, defaults to "InternalError"
 
     Returns:
         str: An ESI standard XML error response 
@@ -129,6 +159,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
     elif exit_status == 3:
         code = "NoMatchingData"
         if error_message is None: error_message = "No data found that matched the subset constraints."
+    else: exit_status = None
 
     if error_message is None: error_message = "An internal error occurred."
 
@@ -153,6 +184,16 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
     return xml_response
 
 
+""" Returns an XML response containing the input file, shape file, and output file paths for the process.
+
+    Args:
+        input_file (str): The path to the input HDF5 or GeoTIFF file used in the process
+        shape_file (str): The path to the input shapefile used in the process
+        output_file (str): The path to the output file produced by the process
+
+    Returns:
+        str: An ESI standard XML string for normal (successful) completion
+"""
 def get_xml_success_response(input_file, shape_file, output_file):
     xml_response = f"""
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

@@ -1,5 +1,3 @@
-#!/Users/jrao/anaconda3/envs/mask_fill_env/bin/python3.7
-
 import geopandas as gpd
 from rasterio import features
 import numpy as np

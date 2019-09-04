@@ -1,5 +1,3 @@
-#!/Users/jrao/anaconda3/envs/mask_fill_env/bin/python3.7
-
 import numpy as np
 import gdal
 import rasterio
