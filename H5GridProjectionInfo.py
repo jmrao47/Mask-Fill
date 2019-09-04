@@ -52,7 +52,7 @@ def get_dimension_datasets(h5_dataset):
     return x, y
 
 
-""" Returns the proj4 string corresponding to a grid mapping dataset
+""" Returns the proj4 string corresponding to a grid mapping dataset.
 
     Args:
         grid_mapping (h5py._hl.dataset.Dataset): A dataset containing CF parameters for a coordinate reference system
@@ -80,7 +80,7 @@ def decode_bytes(dictionary):
         if isinstance(value, bytes): dictionary[key] = value.decode()
 
 
-""" Determines the transform from the image coordinates of the HDF5 dataset to  world coordinates in the 
+""" Determines the transform from the image coordinates of the HDF5 dataset to world coordinates in the 
     coordinate reference frame of the HDF5 dataset. See https://pypi.org/project/affine/ for more information.
 
     Args:
@@ -96,7 +96,7 @@ def get_transform(h5_dataset):
 
 
 """ Gets the cell height and width of the gridded HDF5 dataset in the dataset's dimension scales.
-    Note: the cell height may be negative.
+    Note: the cell height is expected to be negative because the row indices of image data increase downwards.
 
     Args:
          h5_dataset (h5py._hl.dataset.Dataset): The HDF5 dataset
