@@ -2,10 +2,10 @@ import os
 import shutil
 import numpy as np
 import h5py
-import MaskFill
 import hashlib
-import H5GridProjectionInfo
+from pymods import H5GridProjectionInfo, MaskFill
 import logging
+from rasterio.plot import show
 
 
 mask_grid_cache_values = ['ignore_and_delete',
@@ -90,7 +90,7 @@ def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_v
     if len(h5_dataset.shape) != 2:
         logging.debug(f'The dataset {h5_dataset.name} is not two dimensional and cannot be mask filled')
         return
-    # show(h5_dataset[:], title="Original " + h5_dataset.name)
+    show(h5_dataset[:], title="Original " + h5_dataset.name)
 
     # Get the mask array corresponding to the HDF5 dataset and the shapefile
     mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
@@ -102,7 +102,7 @@ def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_v
         mask_filled_data = MaskFill.mask_fill_array(h5_dataset[:], mask_array, fill_value)
         h5_dataset.write_direct(mask_filled_data)
 
-        # show(mask_filled_data, title="Mask Filled " + h5_dataset.name)
+        show(mask_filled_data, title="Mask Filled " + h5_dataset.name)
 
         # Get all values in mask_filled_data excluding the fill value
         unfilled_data = mask_filled_data[mask_filled_data != fill_value]

@@ -5,7 +5,7 @@ import rasterio.mask
 from osgeo import osr
 from osgeo import gdal_array
 import logging
-import MaskFill
+from pymods import MaskFill
 
 
 """ Performs a mask fill on the given GeoTIFF using the shapes in the given shapefile. 

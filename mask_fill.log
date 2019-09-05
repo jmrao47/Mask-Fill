@@ -1,0 +1,562 @@
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+ERROR:root:An input data file is required for the mask fill utility
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with GeoTIFF /Users/jrao/Downloads/SMAP_Geographic_Surface.tif and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:The GeoTIFF does not have a fill value, so the default fill value -9999.0 will be used
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_cf'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 72, in get_proj4
+    dictionary = CRS.from_cf(cf_parameters).to_dict()
+AttributeError: type object 'CRS' has no attribute 'from_cf'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_cf'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/ATL17_20190201001042_05280201_001_01.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 74, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/test_env2/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/test_env2/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/ATL17_20190201001042_05280201_001_01.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_cf'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 72, in get_proj4
+    dictionary = CRS.from_cf(cf_parameters).to_dict()
+AttributeError: type object 'CRS' has no attribute 'from_cf'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_cf'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_cf'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 72, in get_proj4
+    dictionary = CRS.from_cf(cf_parameters).to_dict()
+AttributeError: type object 'CRS' has no attribute 'from_cf'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_cf'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_cf'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 74, in get_proj4
+    dictionary = CRS.from_cf(cf_parameters).to_dict()
+AttributeError: type object 'CRS' has no attribute 'from_cf'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_cf'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_dict'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 73, in get_proj4
+    return CRS.from_dict(cf_parameters).to_proj4()
+AttributeError: type object 'CRS' has no attribute 'from_dict'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_dict'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/ATL17_20190201001042_05280201_001_01.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/ATL17_20190201001042_05280201_001_01.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/ATL17_20190201001042_05280201_001_01.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +standard_parallel=30.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 73, in get_proj4
+    return CRS(cf_parameters).to_proj4()
+  File "/Users/jrao/anaconda3/envs/test_env2/lib/python3.7/site-packages/pyproj/crs.py", line 146, in __init__
+    super(CRS, self).__init__(projstring)
+  File "pyproj/_crs.pyx", line 317, in pyproj._crs._CRS.__init__
+pyproj.exceptions.CRSError: Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +standard_parallel=30.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+ERROR:root:CRSError('Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +standard_parallel=30.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)')
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 75, in get_proj4
+    return CRS(cf_parameters).to_proj4()
+  File "/Users/jrao/anaconda3/envs/test_env2/lib/python3.7/site-packages/pyproj/crs.py", line 146, in __init__
+    super(CRS, self).__init__(projstring)
+  File "pyproj/_crs.pyx", line 317, in pyproj._crs._CRS.__init__
+pyproj.exceptions.CRSError: Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+ERROR:root:CRSError('Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)')
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 75, in get_proj4
+    return CRS(cf_parameters).to_proj4()
+  File "/Users/jrao/anaconda3/envs/test_env2/lib/python3.7/site-packages/pyproj/crs.py", line 146, in __init__
+    super(CRS, self).__init__(projstring)
+  File "pyproj/_crs.pyx", line 317, in pyproj._crs._CRS.__init__
+pyproj.exceptions.CRSError: Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+ERROR:root:CRSError('Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)')
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:type object 'CRS' has no attribute 'from_dict'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 75, in get_proj4
+    return CRS.from_dict(cf_parameters).to_proj4()
+AttributeError: type object 'CRS' has no attribute 'from_dict'
+ERROR:root:AttributeError("type object 'CRS' has no attribute 'from_dict'")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 44, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 69, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 72, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 95, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 129, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 161, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 75, in get_proj4
+    return CRS(cf_parameters).to_proj4()
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/pyproj/crs.py", line 303, in __init__
+    super(CRS, self).__init__(projstring)
+  File "pyproj/_crs.pyx", line 1335, in pyproj._crs._CRS.__init__
+pyproj.exceptions.CRSError: Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)
+ERROR:root:CRSError('Invalid projection: +false_easting=0.0 +false_northing=0.0 +grid_mapping_name=lambert_cylindrical_equal_area +longitude_of_central_meridian=0.0 +lat_ts=30.0 +type=crs: (Internal Proj Error: proj_create: unrecognized format / unknown name)')
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+ERROR:root:'standard_parallel'
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 76, in process_file
+    process_children(file, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 70, in process_children
+    process_children(child, process, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 73, in process_children
+    process(child, *args)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 96, in mask_fill
+    mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 130, in get_mask_array
+    mask_id = get_mask_array_id(h5_dataset, shape_path)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 162, in get_mask_array_id
+    + str(h5_dataset[:].shape) + shape_path
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 35, in get_hdf_proj4
+    return get_proj4(grid_mapping)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5GridProjectionInfo.py", line 76, in get_proj4
+    dictionary.pop('standard_parallel')
+KeyError: 'standard_parallel'
+ERROR:root:KeyError('standard_parallel')
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+ERROR:root:Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+Traceback (most recent call last):
+  File "/Users/jrao/PycharmProjects/MaskFill/MaskFillUtility.py", line 71, in mask_fill
+    args.mask_grid_cache, args.fill_value)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 45, in produce_masked_hdf
+    process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
+  File "/Users/jrao/PycharmProjects/MaskFill/pymods/H5MaskFill.py", line 75, in process_file
+    with h5py.File(file_path, mode='r+') as file:
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 394, in __init__
+    swmr=swmr)
+  File "/Users/jrao/anaconda3/envs/mask_fill_environment/lib/python3.7/site-packages/h5py/_hl/files.py", line 172, in make_fid
+    fid = h5f.open(name, h5f.ACC_RDWR, fapl=fapl)
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5f.pyx", line 85, in h5py.h5f.open
+OSError: Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')
+ERROR:root:OSError("Unable to open file (unable to lock file, errno = 35, error message = 'Resource temporarily unavailable')")
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_FRA_shp/gadm36_FRA_0.shp
+INFO:root:Logger configured
+INFO:root:Parsed input parameters
+INFO:root:Performing mask fill with HDF5 file /Users/jrao/Downloads/SMAP_L4_SM_aup_20150401T150000_Vv4001_001.h5 and shapefile /Users/jrao/Downloads/gadm36_USA_shp/gadm36_USA_0.shp

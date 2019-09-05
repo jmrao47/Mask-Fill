@@ -69,10 +69,9 @@ def get_proj4(grid_mapping):
     cf_parameters = dict(grid_mapping.attrs)
     decode_bytes(cf_parameters)
 
-    dictionary = CRS.from_cf(cf_parameters).to_dict()
-    if 'standard_parallel' in dictionary: dictionary['lat_ts'] = cf_parameters['standard_parallel']
-
-    return CRS.from_dict(dictionary).to_proj4()
+    crs_dict = CRS.from_cf(cf_parameters).to_dict()
+    if 'standard_parallel' in cf_parameters: crs_dict['lat_ts'] = cf_parameters['standard_parallel']
+    return CRS.from_dict(crs_dict).to_proj4()
 
 
 """ Decodes all byte values in the dictionary.

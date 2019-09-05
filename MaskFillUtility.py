@@ -4,9 +4,8 @@ import argparse
 import time
 import os
 import logging
-import GeotiffMaskFill
-import H5MaskFill
-from H5GridProjectionInfo import CFComplianceError
+from pymods import GeotiffMaskFill, H5MaskFill
+from pymods.H5GridProjectionInfo import CFComplianceError
 
 
 """ Executable which creates a mask filled version of a data file using a shapefile.
