@@ -2,7 +2,6 @@ import geopandas as gpd
 from rasterio import features
 import numpy as np
 import os
-from rasterio.plot import show
 
 
 """ Projects the shapes in the given shapefile to a new coordinate reference system.
@@ -31,10 +30,8 @@ def get_projected_shapes(proj4, shape_path):
         numpy.ndarray: A numpy array representing the rasterized shapes
 """
 def get_mask_array(shapes, out_shape, transform):
-    mask = features.rasterize(shapes=shapes, default_value=0, fill=1, out_shape=out_shape,
+    return features.rasterize(shapes=shapes, default_value=0, fill=1, out_shape=out_shape,
                               dtype=np.uint8, transform=transform, all_touched=True)
-    show(mask, title="Mask")
-    return mask
 
 
 """ Performs a mask fill on raster_arr using the mask mask_array

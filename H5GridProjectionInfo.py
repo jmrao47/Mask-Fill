@@ -1,5 +1,6 @@
 from pyproj import CRS
 import affine
+import logging
 
 
 """ Raised when an HDF5 file does not follow CF conventions."""
@@ -17,14 +18,17 @@ class CFComplianceError(Exception):
 """
 def get_hdf_proj4(h5_dataset):
     dimensions = get_dimension_datasets(h5_dataset)
-    if not dimensions[0].attrs.__contains__('units'): raise CFComplianceError
+    if not dimensions[0].attrs.__contains__('units'):
+        raise CFComplianceError(f'The dataset {h5_dataset.name} does not have a units attribute')
+
     units = dimensions[0].attrs['units'].decode()
 
     if 'degrees' in units:
         # Geographic proj4 string
         return "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
-    if not h5_dataset.attrs.__contains__('grid_mapping'): raise CFComplianceError
+    if not h5_dataset.attrs.__contains__('grid_mapping'):
+        raise CFComplianceError(f'The dataset is not geographically gridded and does not have a grid mapping attribute')
 
     grid_mapping_name = h5_dataset.attrs['grid_mapping']
     grid_mapping = h5_dataset.file[grid_mapping_name]
@@ -42,7 +46,8 @@ def get_hdf_proj4(h5_dataset):
 """
 def get_dimension_datasets(h5_dataset):
     file = h5_dataset.file
-    if 'DIMENSION_LIST' not in h5_dataset.attrs: raise CFComplianceError
+    if 'DIMENSION_LIST' not in h5_dataset.attrs:
+        raise CFComplianceError(f'The dataset {h5_dataset.name} does not have a DIMENSION_LIST attribute')
 
     dim_list = h5_dataset.attrs['DIMENSION_LIST']
     for ref in dim_list:
@@ -153,4 +158,6 @@ def get_dimension_arrays(h5_dataset):
 """
 def get_fill_value(h5_dataset, default_fill_value):
     if h5_dataset.attrs.__contains__('_FillValue'): return h5_dataset.attrs['_FillValue']
+    logging.info(f'The dataset {h5_dataset.name} does not have a fill value, '
+                 f'so the default fill value {default_fill_value} will be used')
     return default_fill_value

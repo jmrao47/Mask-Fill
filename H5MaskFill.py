@@ -1,11 +1,11 @@
 import os
 import shutil
-from rasterio.plot import show
 import numpy as np
 import h5py
 import MaskFill
 import hashlib
 import H5GridProjectionInfo
+import logging
 
 
 mask_grid_cache_values = ['ignore_and_delete',
@@ -41,6 +41,7 @@ def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, defaul
     else:
         new_file_path = MaskFill.get_masked_file_path(hdf_path, output_dir)
         shutil.copy(hdf_path, new_file_path)
+        logging.debug(f'Created output file: {new_file_path}')
         process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
 
     # Save mask arrays if the mask_grid_cache value requires
@@ -48,6 +49,7 @@ def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, defaul
         for mask_id, mask_array in saved_mask_arrays.items():
             mask_array_path = get_mask_array_path(mask_id, cache_dir)
             np.save(mask_array_path, mask_array)
+        logging.debug('Cached all mask arrays')
 
     if mask_grid_cache == 'maskgrid_only': return None
     return MaskFill.get_masked_file_path(hdf_path, output_dir)
@@ -85,8 +87,10 @@ def process_file(file_path, process, *args):
 """
 def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays):
     # Ensure dataset has at least two dimensions and can be mask filled
-    if len(h5_dataset.shape) != 2: return
-    show(h5_dataset[:], title="Original " + h5_dataset.name)
+    if len(h5_dataset.shape) != 2:
+        logging.debug(f'The dataset {h5_dataset.name} is not two dimensional and cannot be mask filled')
+        return
+    # show(h5_dataset[:], title="Original " + h5_dataset.name)
 
     # Get the mask array corresponding to the HDF5 dataset and the shapefile
     mask_array = get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mask_arrays)
@@ -98,7 +102,7 @@ def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_v
         mask_filled_data = MaskFill.mask_fill_array(h5_dataset[:], mask_array, fill_value)
         h5_dataset.write_direct(mask_filled_data)
 
-        show(mask_filled_data, title="Mask Filled " + h5_dataset.name)
+        # show(mask_filled_data, title="Mask Filled " + h5_dataset.name)
 
         # Get all values in mask_filled_data excluding the fill value
         unfilled_data = mask_filled_data[mask_filled_data != fill_value]
@@ -108,6 +112,7 @@ def mask_fill(h5_dataset, shape_path, cache_dir, mask_grid_cache, default_fill_v
         if h5_dataset.attrs.__contains__('observed_min'): h5_dataset.attrs.modify('observed_min', min(unfilled_data))
         if h5_dataset.attrs.__contains__('observed_mean'): h5_dataset.attrs.modify('observed_mean', np.mean(unfilled_data))
 
+        logging.debug(f'Mask filled the dataset {h5_dataset.name}')
 
 """ Gets the mask array corresponding the HDF5 file and shape file from a set of saved mask arrays or the cache directory.
     If the mask array file does not already exist, it is created and added to the set of saved mask arrays.

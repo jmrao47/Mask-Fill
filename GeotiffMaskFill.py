@@ -4,6 +4,7 @@ import rasterio
 import rasterio.mask
 from osgeo import osr
 from osgeo import gdal_array
+import logging
 import MaskFill
 
 
@@ -33,6 +34,8 @@ def produce_masked_geotiff(geotiff_path, shape_path, output_dir, default_fill_va
     out_meta.update({"driver": "GTiff", "height": out_image.shape[1], "width": out_image.shape[2]})
     with rasterio.open(output_path, "w", **out_meta) as dest:
         dest.write(out_image)
+
+    logging.debug('Successfully created masked GeoTIFF and updated metadata')
 
     return MaskFill.get_masked_file_path(geotiff_path, output_dir)
 
@@ -81,7 +84,12 @@ def get_geotiff_proj4(geotiff_path):
 def get_fill_value(geotiff_path, default_fill_value):
     raster = gdal.Open(geotiff_path)
     fill_value = raster.GetRasterBand(1).GetNoDataValue()
-    return default_fill_value if fill_value is None else fill_value
+
+    if fill_value is None:
+        logging.info(f'The GeoTIFF does not have a fill value, '
+                     f'so the default fill value {default_fill_value} will be used')
+        return default_fill_value
+    return fill_value
 
 
 

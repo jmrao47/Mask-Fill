@@ -3,6 +3,7 @@
 import argparse
 import time
 import os
+import logging
 import GeotiffMaskFill
 import H5MaskFill
 from H5GridProjectionInfo import CFComplianceError
@@ -10,6 +11,7 @@ from H5GridProjectionInfo import CFComplianceError
 
 """ Executable which creates a mask filled version of a data file using a shapefile.
     Applies a fill value to the data file in the areas outside of the given shapes.
+    Writes a log file to the current working directory.
 
     Input parameters:
         --FILE_URLS: Path to a GeoTIFF or HDF5 file 
@@ -33,6 +35,8 @@ from H5GridProjectionInfo import CFComplianceError
             
         --DEFAULT_FILL: (optional) The default fill value for the mask fill if no other fill values are provided.
             If not provided, the value -9999 will be used.
+            
+        --DEBUG: (optional) If True, changes the log level to DEBUG from the default INFO.
 """
 
 
@@ -47,27 +51,49 @@ default_mask_grid_cache = 'ignore_and_delete'
         including the download-URL for accessing the output file, or an exception response if necessary.
 """
 def mask_fill():
+    configure_logger()
+
+    # Parse and validate input parameters
     args = get_input_parameters()
     error_message = validate_input_parameters(args)
     if error_message is not None: return error_message
 
+    # Perform mask fill according to input file type
     try:
         # GeoTIFF case
         if args.input_file.lower().endswith('.tif'):
+            logging.info(f'Performing mask fill with GeoTIFF {args.input_file} and shapefile {args.shape_file}')
             output_file = GeotiffMaskFill.produce_masked_geotiff(args.input_file, args.shape_file, args.output_dir,
                                                                  args.fill_value)
-
         # HDF5 case
         if args.input_file.lower().endswith('.h5'):
+            logging.info(f'Performing mask fill with HDF5 file {args.input_file} and shapefile {args.shape_file}')
             output_file = H5MaskFill.produce_masked_hdf(args.input_file, args.shape_file, args.output_dir,
                                                         args.mask_grid_cache, args.fill_value)
-
         return get_xml_success_response(args.input_file, args.shape_file, output_file)
-    except CFComplianceError:
-        error_message = "The given data file does not follow CF conventions and cannot be mask filled"
-        return get_xml_error_response(exit_status=1, error_message=error_message)
+    except CFComplianceError as e:
+        return get_xml_error_response(exit_status=1, error_message=f'The input file is not CF compliant: {str(e)}')
     except Exception as e:
+        # Logs stack traceback
+        logging.exception(e)
         return get_xml_error_response(error_message=repr(e))
+
+
+""" Configures the logger for the mask fill process, setting the log level to INFO."""
+def configure_logger():
+    log_file_path = get_log_file_path()
+    logging.basicConfig(level=logging.INFO, filename=log_file_path)
+    logging.info('Logger configured')
+
+
+""" Gets the file path to the log file for the mask fill process. 
+    The file will be in the current working directory with filename 'mask_fill.log'.
+    
+    Returns:
+        str: The log file path
+"""
+def get_log_file_path():
+    return os.path.join(os.getcwd(), 'mask_fill.log')
 
 
 """ Gets the input parameters using an argparse argument parser. If no input is given for certain parameters, a default 
@@ -88,7 +114,9 @@ def get_input_parameters():
                         default=default_mask_grid_cache)
     parser.add_argument('--DEFAULT_FILL', dest='fill_value', help='Fill value for mask fill',
                         default=default_fill_value)
+    parser.add_argument('--DEBUG', dest='debug', help='If True, changes the log level to DEBUG from the default INFO')
 
+    logging.info('Parsed input parameters')
     return parser.parse_args()
 
 
@@ -128,6 +156,11 @@ def validate_input_parameters(params):
         error_message = "The default fill value must be a number"
         return get_xml_error_response(exit_status=1, error_message=error_message)
 
+    # Set logging level to DEBUG if the input parameter is true
+    if params.debug is not None and params.debug.lower() == 'true': logging.getLogger().setLevel(logging.DEBUG)
+
+    # If no issues are found, return None
+    logging.debug('All input parameters are valid')
     return None
 
 
@@ -162,6 +195,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
     else: exit_status = None
 
     if error_message is None: error_message = "An internal error occurred."
+    logging.error(error_message)
 
     xml_response = f"""
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -177,6 +211,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
         <Message>
                 {error_message}
                 MaskFillUtility failed with code {exit_status}
+                Log file path: {get_log_file_path()}
         </Message>
     </iesi:Exception>
     """
@@ -211,6 +246,8 @@ def get_xml_success_response(input_file, shape_file, output_file):
     </ns2:agentResponse>
     """
 
+    logging.debug('Process completed successfully')
+    logging.debug(f'Output file: {output_file}')
     return xml_response
 
 
