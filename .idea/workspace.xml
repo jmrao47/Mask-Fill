@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5f9063f-beff-4721-bd04-e9b7fd7d6819" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/MaskFill.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MaskFill.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GeotiffMaskFill.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/H5GridProjectionInfo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/H5MaskFill.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MaskFill.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MaskFillUtility.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaskFillUtility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conda_requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pymods/conda_requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pip_requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pymods/pip_requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -233,7 +224,7 @@
       <workItem from="1567524698053" duration="33373000" />
       <workItem from="1567696748139" duration="83000" />
       <workItem from="1567696893870" duration="4920000" />
-      <workItem from="1567707057208" duration="260000" />
+      <workItem from="1567707057208" duration="939000" />
     </task>
     <servers />
   </component>
