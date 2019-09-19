@@ -63,12 +63,13 @@ def mask_fill():
         if args.input_file.lower().endswith('.tif'):
             logging.info(f'Performing mask fill with GeoTIFF {args.input_file} and shapefile {args.shape_file}')
             output_file = GeotiffMaskFill.produce_masked_geotiff(args.input_file, args.shape_file, args.output_dir,
-                                                                 args.fill_value)
+                                                                 args.output_dir, args.mask_grid_cache, args.fill_value)
         # HDF5 case
         if args.input_file.lower().endswith('.h5'):
             logging.info(f'Performing mask fill with HDF5 file {args.input_file} and shapefile {args.shape_file}')
             output_file = H5MaskFill.produce_masked_hdf(args.input_file, args.shape_file, args.output_dir,
-                                                        args.mask_grid_cache, args.fill_value)
+                                                        args.output_dir, args.mask_grid_cache, args.fill_value)
+
         return get_xml_success_response(args.input_file, args.shape_file, output_file)
     except CFComplianceError as e:
         return get_xml_error_response(exit_status=1, error_message=f'The input file is not CF compliant: {str(e)}')
@@ -138,9 +139,6 @@ def validate_input_parameters(params):
     if not params.input_file.endswith('.tif') and not params.input_file.endswith('.h5'):
         error_message = "The input data file must be a GeoTIFF or HDF5 file type"
         return get_xml_error_response(exit_status=1, error_message=error_message)
-    if not params.shape_file.endswith('.shp'):
-        error_message = "The input shapefile must be a .shp file type"
-        return get_xml_error_response(exit_status=1, error_message=error_message)
 
     # Ensure that all given paths exist
     paths = {params.input_file, params.shape_file, params.output_dir}
@@ -196,8 +194,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
     if error_message is None: error_message = "An internal error occurred."
     logging.error(error_message)
 
-    xml_response = f"""
-    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    xml_response = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <iesi:Exception
         xmlns:iesi="http://eosdis.nasa.gov/esi/rsp/i"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -212,8 +209,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
                 MaskFillUtility failed with code {exit_status}
                 Log file path: {get_log_file_path()}
         </Message>
-    </iesi:Exception>
-    """
+    </iesi:Exception>"""
 
     return xml_response
 
@@ -229,8 +225,7 @@ def get_xml_error_response(exit_status=None, error_message=None, code="InternalE
         str: An ESI standard XML string for normal (successful) completion
 """
 def get_xml_success_response(input_file, shape_file, output_file):
-    xml_response = f"""
-    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    xml_response = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
     <ns2:agentResponse xmlns:ns2="http://eosdis.nasa.gov/esi/rsp/i">
         <downloadUrls>
             {output_file}
@@ -242,8 +237,7 @@ def get_xml_success_response(input_file, shape_file, output_file):
                 OUTFILE = {output_file}
             </message>
         </processInfo>
-    </ns2:agentResponse>
-    """
+    </ns2:agentResponse>"""
 
     logging.debug('Process completed successfully')
     logging.debug(f'Output file: {output_file}')

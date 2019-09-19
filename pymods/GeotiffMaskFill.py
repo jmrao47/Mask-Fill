@@ -5,7 +5,7 @@ import rasterio.mask
 from osgeo import osr
 from osgeo import gdal_array
 import logging
-from pymods import MaskFill
+from pymods import MaskFill, MaskFillCaching
 
 
 """ Performs a mask fill on the given GeoTIFF using the shapes in the given shapefile. 
@@ -20,8 +20,11 @@ from pymods import MaskFill
     Returns:
         str: The path to the output GeoTIFF file
 """
-def produce_masked_geotiff(geotiff_path, shape_path, output_dir, default_fill_value):
-    mask_array = get_mask_array(geotiff_path, shape_path)
+def produce_masked_geotiff(geotiff_path, shape_path, output_dir, cache_dir, mask_grid_cache, default_fill_value):
+    mask_grid_cache = mask_grid_cache.lower()
+    mask_array = get_mask_array(geotiff_path, shape_path, cache_dir, mask_grid_cache)
+
+    if mask_grid_cache == 'maskgrid_only': return None
 
     # Perform mask fill
     raster_arr, fill_value = gdal_array.LoadFile(geotiff_path), get_fill_value(geotiff_path, default_fill_value)
@@ -40,6 +43,16 @@ def produce_masked_geotiff(geotiff_path, shape_path, output_dir, default_fill_va
     return MaskFill.get_masked_file_path(geotiff_path, output_dir)
 
 
+def get_mask_array(geotiff_path, shape_path, cache_dir, mask_grid_cache):
+    mask_array = MaskFillCaching.get_cached_mask_array(geotiff_path, shape_path, cache_dir, mask_grid_cache)
+
+    if mask_array is None:
+        mask_array = create_mask_array(geotiff_path, shape_path)
+        MaskFillCaching.cache_mask_array(mask_array, geotiff_path, shape_path, cache_dir, mask_grid_cache)
+
+    return mask_array
+
+
 """ Rasterizes the shapes in the given shape file to create a mask array for the given GeoTIFF.
 
     Args:
@@ -49,7 +62,7 @@ def produce_masked_geotiff(geotiff_path, shape_path, output_dir, default_fill_va
     Returns:
         numpy.ndarray: A numpy array representing the rasterized shapes from the shape file
 """
-def get_mask_array(geotiff_path, shape_path):
+def create_mask_array(geotiff_path, shape_path):
     projected_shapes = MaskFill.get_projected_shapes(get_geotiff_proj4(geotiff_path), shape_path)
     raster = rasterio.open(geotiff_path)
     return MaskFill.get_mask_array(projected_shapes, raster.read(1).shape, raster.transform)
@@ -91,6 +104,33 @@ def get_fill_value(geotiff_path, default_fill_value):
         return default_fill_value
     return fill_value
 
+
+""" Creates an id corresponding to the given shapefile, projection information, and shape of a dataset,
+    which determine the mask array for the dataset.  
+
+    Args:
+        h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
+        shape_path (str): Path to a shape file used to create the mask array for the mask fill
+
+    Returns:
+        str: The id 
+"""
+def get_mask_array_id(geotiff_path, shape_path):
+    # The mask array is determined by the CRS of the dataset, the dataset's transform, the shape of the dataset,
+    # and the shapes used in the mask
+    proj_string = get_geotiff_proj4(geotiff_path)
+    dataset_shape, transform = get_geotiff_info(geotiff_path)
+
+    return MaskFillCaching.create_mask_array_id(proj_string, transform, dataset_shape, shape_path)
+
+
+""" returns transform and shape of geotiff"""
+def get_geotiff_info(geotiff_path):
+    raster = rasterio.open(geotiff_path)
+    shape = raster.read(1).shape
+    transform = raster.transform
+
+    return shape, transform
 
 
 
