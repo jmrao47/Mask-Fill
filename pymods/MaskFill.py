@@ -15,7 +15,11 @@ from rasterio.plot import show
         geopandas.geoseries.GeoSeries: A geopandas GeoSeries containing the projected shape information.
 """
 def get_projected_shapes(proj4, shape_path):
-    shape_gdf = gpd.read_file(shape_path)  # Load shape file as geopandas data frame
+    try:
+        shape_gdf = gpd.read_file(shape_path)  # Load shape file as geopandas data frame
+    except:
+        raise ValueError('Shape data cannot be read from the given shapefile.')
+
     projected_gdf = shape_gdf.to_crs(proj4)  # Project data frame to new coordinate reference system
     return projected_gdf['geometry']
 

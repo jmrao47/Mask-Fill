@@ -1,19 +1,9 @@
-import os
 import shutil
 import numpy as np
 import h5py
-import hashlib
-from pymods import H5GridProjectionInfo, MaskFill
+from pymods import H5GridProjectionInfo, MaskFill, MaskFillCaching
 import logging
 from rasterio.plot import show
-
-
-mask_grid_cache_values = ['ignore_and_delete',
-                          'ignore_and_save',
-                          'use_cache',
-                          'use_and_save',
-                          'use_cache_delete',
-                          'maskgrid_only']
 
 
 """ Creates a mask filled version of the given HDF5 file using the given shapefile. Outputs the new HDF5 file to the
@@ -31,9 +21,8 @@ mask_grid_cache_values = ['ignore_and_delete',
     Returns:
         str: The path to the output HDF5 file
 """
-def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, default_fill_value):
+def produce_masked_hdf(hdf_path, shape_path, output_dir, cache_dir, mask_grid_cache, default_fill_value):
     mask_grid_cache = mask_grid_cache.lower()
-    cache_dir = output_dir
     saved_mask_arrays = dict()
 
     if mask_grid_cache == 'maskgrid_only':
@@ -44,15 +33,9 @@ def produce_masked_hdf(hdf_path, shape_path, output_dir, mask_grid_cache, defaul
         logging.debug(f'Created output file: {new_file_path}')
         process_file(new_file_path, mask_fill, shape_path, cache_dir, mask_grid_cache, default_fill_value, saved_mask_arrays)
 
-    # Save mask arrays if the mask_grid_cache value requires
-    if 'delete' not in mask_grid_cache:
-        for mask_id, mask_array in saved_mask_arrays.items():
-            mask_array_path = get_mask_array_path(mask_id, cache_dir)
-            np.save(mask_array_path, mask_array)
-        logging.debug('Cached all mask arrays')
+    MaskFillCaching.cache_mask_arrays(saved_mask_arrays, cache_dir, mask_grid_cache)
 
-    if mask_grid_cache == 'maskgrid_only': return None
-    return MaskFill.get_masked_file_path(hdf_path, output_dir)
+    if mask_grid_cache != 'maskgrid_only': return MaskFill.get_masked_file_path(hdf_path, output_dir)
 
 
 """ Performs the given process on all datasets in the HDF5 file.
@@ -134,12 +117,11 @@ def get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mas
 
     # If the required mask array has already been created and cached, and the mask_grid_cache value allows the use of
     # cached arrays, read in the cached mask array from the file
-    mask_array_path = get_mask_array_path(mask_id, cache_dir)
-    if 'use' in mask_grid_cache and os.path.exists(mask_array_path): mask_array = np.load(mask_array_path)
+    mask_array = MaskFillCaching.get_cached_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache)
 
     # Otherwise, create the mask array
-    else: mask_array = create_mask_array(h5_dataset, shape_path)
-
+    if mask_array is None: mask_array = create_mask_array(h5_dataset, shape_path)
+    
     # Save and return the mask array
     saved_mask_arrays[mask_id] = mask_array
     return mask_array
@@ -158,24 +140,11 @@ def get_mask_array(h5_dataset, shape_path, cache_dir, mask_grid_cache, saved_mas
 def get_mask_array_id(h5_dataset, shape_path):
     # The mask array is determined by the CRS of the dataset, the dataset's transform, the shape of the dataset,
     # and the shapes used in the mask
-    mask_id = str(H5GridProjectionInfo.get_hdf_proj4(h5_dataset)) + str(H5GridProjectionInfo.get_transform(h5_dataset)) \
-              + str(h5_dataset[:].shape) + shape_path
-    # Hash the mask id and return
-    mask_id = hashlib.sha224(mask_id.encode()).hexdigest()
-    return mask_id
+    proj_string = H5GridProjectionInfo.get_hdf_proj4(h5_dataset)
+    transform = H5GridProjectionInfo.get_transform(h5_dataset)
+    dataset_shape = h5_dataset[:].shape
 
-
-""" Returns the path to the file containing a mask array corresponding to the given HDF5 dataset.
-
-    Args:
-        h5_dataset (h5py._hl.dataset.Dataset): The given HDF5 dataset
-        cache_dir (str): The directory in which mask arrays are cached
-
-    Returns:
-        str: The path to the mask array file 
-"""
-def get_mask_array_path(mask_id, cache_dir):
-    return os.path.join(cache_dir, mask_id + ".npy")
+    return MaskFillCaching.create_mask_array_id(proj_string, transform, dataset_shape, shape_path)
 
 
 """ Creates a mask array corresponding to the HDF5 dataset and shape file
