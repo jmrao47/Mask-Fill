@@ -15,7 +15,7 @@ from pymods.H5GridProjectionInfo import CFComplianceError
     Input parameters:
         --FILE_URLS: Path to a GeoTIFF or HDF5 file 
         
-        --SHAPEFILE: Path to a .shp shapefile
+        --SHAPEFILE: Path to a shapefile (shp, kml, geojson, etc.)
         
         --OUTPUT_DIR: (optional) Path to the output directory where the mask filled file will be written.
             If not provided, the current working directory will be used.

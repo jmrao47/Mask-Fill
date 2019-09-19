@@ -7,7 +7,6 @@ from osgeo import gdal_array
 import logging
 from pymods import MaskFill, MaskFillCaching
 
-
 """ Performs a mask fill on the given GeoTIFF using the shapes in the given shapefile. 
     Writes the resulting GeoTIFF to output_dir.
 
@@ -16,7 +15,7 @@ from pymods import MaskFill, MaskFillCaching
         shape_path (str): The path to the shape file 
         output_dir (str): The path to the output directory
         default_fill_value (float): The fill value used for the mask fill if the GeoTIFF has no fill value
-    
+
     Returns:
         str: The path to the output GeoTIFF file
 """
@@ -43,6 +42,19 @@ def produce_masked_geotiff(geotiff_path, shape_path, output_dir, cache_dir, mask
     return MaskFill.get_masked_file_path(geotiff_path, output_dir)
 
 
+""" Gets the mask array corresponding the GeoTIFF file and shape file from the cache directory (if the mask grid cache
+    value allows).
+    If the mask array file does not already exist, it is created and cached (if the mask grid cache value allows).
+
+    Args:
+        geotiff_path (str): The path to the GeoTIFF 
+        shape_path (str): The path to the shape file 
+        cache_dir (str): The path to the cache directory
+        default_fill_value (float): The fill value used for the mask fill if the GeoTIFF has no fill value
+
+    Returns:
+        numpy.ndarray: The mask array
+"""
 def get_mask_array(geotiff_path, shape_path, cache_dir, mask_grid_cache):
     mask_array = MaskFillCaching.get_cached_mask_array(geotiff_path, shape_path, cache_dir, mask_grid_cache)
 
@@ -124,23 +136,14 @@ def get_mask_array_id(geotiff_path, shape_path):
     return MaskFillCaching.create_mask_array_id(proj_string, transform, dataset_shape, shape_path)
 
 
-""" returns transform and shape of geotiff"""
+""" Returns the shape and transform of the given GeoTIFF
+    Args:
+        geotiff_path (str): The path to the GeoTIFF
+    Returns:
+        tuple: The shape (tuple) and transform (affine.Affine) corresponding to the GeoTIFF"""
 def get_geotiff_info(geotiff_path):
     raster = rasterio.open(geotiff_path)
     shape = raster.read(1).shape
     transform = raster.transform
 
     return shape, transform
-
-
-
-
-
-
-
-
-
-
-
-
-
