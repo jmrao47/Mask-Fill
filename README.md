@@ -7,7 +7,7 @@ are replaced with a fill value.
 
 INSTALLATION
 
-MaskFill was developed using the Anaconda distribution of python
+MaskFill was developed using the Anaconda distribution of Python
 (https://www.anaconda.com/download) and conda virutal environment.  This
 simplifies dependency management.  Run these commands to create a mask fill conda
 virtual environment and install all the needed packages:
